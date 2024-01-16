@@ -3,3 +3,5 @@
 
 <x-backpack::menu-item title="Items" icon="la la-question" :link="backpack_url('item')" />
 <x-backpack::menu-item title="Locations" icon="la la-question" :link="backpack_url('location')" />
+<x-backpack::menu-item title="Item inventory heads" icon="la la-question" :link="backpack_url('item-inventory-head')" />
+<x-backpack::menu-item title="Item inventory dets" icon="la la-question" :link="backpack_url('item-inventory-det')" />
