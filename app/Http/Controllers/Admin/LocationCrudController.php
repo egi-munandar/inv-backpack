@@ -41,7 +41,13 @@ class LocationCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::setFromDb(); // set columns from db columns.
-        CRUD::field('parent');
+        $this->crud->setColumnDetails('parent_id', [
+            'label' => 'Parent',
+            'type' => 'select',
+            'entity' => 'parent',
+            'attribute' => 'location_name',
+            'model' => "App\Models\Location"
+        ]);
         /**
          * Columns can be defined using the fluent syntax:
          * - CRUD::column('price')->type('number');
@@ -70,7 +76,6 @@ class LocationCrudController extends CrudController
         CRUD::field('path')->remove();
         CRUD::setOperationSetting('strippedRequest', function ($request) {
             $input = $request->only(CRUD::getAllFieldNames());
-            info($request->all());
             if ($request->parent_id > 0) {
                 $parent = Location::find($request->parent_id);
                 $input['path'] = $parent->path . '/' . $request->location_name;

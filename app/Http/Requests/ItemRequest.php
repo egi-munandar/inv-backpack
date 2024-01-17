@@ -25,6 +25,7 @@ class ItemRequest extends FormRequest
     public function rules()
     {
         return [
+            'item_name' => 'required',
             // 'name' => 'required|min:5|max:255'
         ];
     }

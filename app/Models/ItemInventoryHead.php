@@ -5,6 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ItemInventoryHead extends Model
@@ -25,5 +26,14 @@ class ItemInventoryHead extends Model
     public function dets(): HasMany
     {
         return $this->hasMany(ItemInventoryDet::class, 'head_id');
+    }
+    /**
+     * Get the user that owns the ItemInventoryHead
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

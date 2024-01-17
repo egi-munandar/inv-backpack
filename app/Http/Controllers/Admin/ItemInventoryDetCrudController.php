@@ -21,7 +21,7 @@ class ItemInventoryDetCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -33,7 +33,7 @@ class ItemInventoryDetCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -45,21 +45,60 @@ class ItemInventoryDetCrudController extends CrudController
          * Columns can be defined using the fluent syntax:
          * - CRUD::column('price')->type('number');
          */
+        $this->crud->setColumnDetails('item_id', [
+            'entity' => 'item',
+            'attribute' => 'item_name',
+            'type' => 'select'
+        ]);
+        $this->crud->setColumnDetails('location_id', [
+            'entity' => 'location',
+            'attribute' => 'path',
+            'type' => 'select'
+        ]);
+        $this->crud->setColumnDetails('head_id', [
+            'entity' => 'head',
+            'attribute' => 'unique_id',
+            'type' => 'select'
+        ]);
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
     protected function setupCreateOperation()
     {
         CRUD::setValidation([
-            // 'name' => 'required|min:2',
+            'item_id' => 'required',
+            'location_id' => 'required',
+            'qty' => 'required',
+            'date' => 'required',
         ]);
         CRUD::setFromDb(); // set fields from db columns.
-
+        CRUD::field('date')->type('datetime');
+        CRUD::field([
+            'label' => 'Header',
+            'type' => 'select',
+            'name' => 'head_id',
+            'model' => "App\Models\ItemInventoryHead",
+            'attribute' => 'unique_id',
+        ]);
+        CRUD::field([
+            'label' => 'Location',
+            'type' => 'select',
+            'name' => 'location_id',
+            'model' => "App\Models\Location",
+            'attribute' => 'path',
+        ]);
+        CRUD::field([
+            'label' => 'Item',
+            'type' => 'select',
+            'name' => 'item_id',
+            'model' => "App\Models\Item",
+            'attribute' => 'item_name',
+        ]);
         /**
          * Fields can be defined using the fluent syntax:
          * - CRUD::field('price')->type('number');
@@ -68,7 +107,7 @@ class ItemInventoryDetCrudController extends CrudController
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

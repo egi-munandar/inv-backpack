@@ -21,7 +21,7 @@ class ItemInventoryHeadCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -33,7 +33,7 @@ class ItemInventoryHeadCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -45,21 +45,36 @@ class ItemInventoryHeadCrudController extends CrudController
          * Columns can be defined using the fluent syntax:
          * - CRUD::column('price')->type('number');
          */
+        $this->crud->setColumnDetails('user_id', [
+            'label' => 'User',
+            'type' => 'select',
+            'entity' => 'user',
+            'attribute' => 'name',
+            'model' => "App\Models\User"
+        ]);
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
     protected function setupCreateOperation()
     {
         CRUD::setValidation([
-            // 'name' => 'required|min:2',
+            'source' => 'required'
         ]);
         CRUD::setFromDb(); // set fields from db columns.
-
+        CRUD::field('user_id')->remove();
+        CRUD::setOperationSetting('strippedRequest', function ($request) {
+            $input = $request->only(CRUD::getAllFieldNames());
+            $input['user_id'] = backpack_user()->id;
+            if (!$input['unique_id']) {
+                $input['unique_id'] = uniqid("inv-");
+            }
+            return $input;
+        });
         /**
          * Fields can be defined using the fluent syntax:
          * - CRUD::field('price')->type('number');
@@ -68,7 +83,7 @@ class ItemInventoryHeadCrudController extends CrudController
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
